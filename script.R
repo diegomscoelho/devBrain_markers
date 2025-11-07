@@ -7,7 +7,7 @@ library(ggseg)
 
 # Path to working directory
 setwd("/path/to/your/working/directory")
-gene_symbol = "GFAP"
+gene = "GFAP"
 
 
 # Downloaded from:
@@ -80,43 +80,47 @@ age_labeller <- function(variable, value) {
   return(labels_vector[value])
 }
 
-png(paste0(gene_symbol,"_dev_brain_RNAseq.png"), width = 2800*1.4, height = 800*1.4, res = 250)
+png(paste0(gene,"_dev_brain_RNAseq.png"), width = 2800*1.4, height = 800*1.4, res = 250)
 
-counts %>% filter(gene_symbol == gene_symbol) %>% select(-c(gene_id, ensembl_gene_id, gene_symbol, entrez_id)) %>%
+counts %>% filter(gene_symbol == gene) %>% select(-c(gene_id, ensembl_gene_id, gene_symbol, entrez_id)) %>%
   pivot_longer(!row_num) %>% merge(., columns, by.x = "name", by.y = "column_num") %>%
   merge(mapping_df, ., by = "structure_name") %>%
   merge(age_df, ., by = "age") %>%
   group_by(broad_age) %>%
   ggseg(.data=., hemisphere = "left", colour = "black", mapping = aes(fill = log2(value+1))) +
   scale_fill_gradientn(colours = c("royalblue","firebrick","goldenrod"),na.value="white")  +
-  labs(fill = "Log2(RPKM + 1)", title = paste0("Human Developmental brain RNAseq - ", gene_symbol)) +
+  labs(fill = "Log2(RPKM + 1)", title = paste0("Human Developmental brain RNAseq - ", gene)) +
   facet_wrap(~factor(broad_age, unique(age_df$broad_age)), ncol = 5) + theme_void() +
   theme(strip.text = element_text(size = 18), legend.position = "bottom", title = element_text(size = 24), plot.title = element_text(hjust = .5, vjust = 1))
 
 dev.off()  
 
-svg("AQP4_dev_brain_RNAseq.svg", width = 14, height = 4)
-counts %>% as.data.frame() %>% filter(gene_symbol == "AQP4") %>% select(-c(gene_id, ensembl_gene_id, gene_symbol, entrez_id)) %>%
+svg(paste0(gene, "_dev_brain_RNAseq.svg"), width = 14, height = 4)
+
+counts %>% as.data.frame() %>% filter(gene_symbol == gene) %>% select(-c(gene_id, ensembl_gene_id, gene_symbol, entrez_id)) %>%
   pivot_longer(!row_num) %>% merge(., columns, by.x = "name", by.y = "column_num") %>%
   merge(mapping_df, ., by = "structure_name") %>%
   merge(age_df, ., by = "age") %>%
   group_by(broad_age) %>%
   ggseg(.data=., hemisphere = "left", colour = "black", mapping = aes(fill = log2(value+1))) +
   scale_fill_gradientn(colours = c("royalblue","firebrick","goldenrod"),na.value="white")  +
-  labs(fill = "Log2(RPKM + 1)", title = "Human Developmental brain RNAseq - AQP4") +
+  labs(fill = "Log2(RPKM + 1)", title = paste0("Human Developmental brain RNAseq - ", gene)) +
   facet_wrap(~factor(broad_age, unique(age_df$broad_age)), ncol = 5) + theme_void() +
   theme(strip.text = element_text(size = 18), legend.position = "bottom", title = element_text(size = 24), plot.title = element_text(hjust = .5, vjust = 1))
+
 dev.off()  
 
-pdf("AQP4_dev_brain_RNAseq.pdf", width = 14, height = 4)
-counts %>% as.data.frame() %>% filter(gene_symbol == "AQP4") %>% select(-c(gene_id, ensembl_gene_id, gene_symbol, entrez_id)) %>%
+pdf(paste0(gene,"_dev_brain_RNAseq.pdf"), width = 14, height = 4)
+
+counts %>% as.data.frame() %>% filter(gene_symbol == gene) %>% select(-c(gene_id, ensembl_gene_id, gene_symbol, entrez_id)) %>%
   pivot_longer(!row_num) %>% merge(., columns, by.x = "name", by.y = "column_num") %>%
   merge(mapping_df, ., by = "structure_name") %>%
   merge(age_df, ., by = "age") %>%
   group_by(broad_age) %>%
   ggseg(.data=., hemisphere = "left", colour = "black", mapping = aes(fill = log2(value+1))) +
   scale_fill_gradientn(colours = c("royalblue","firebrick","goldenrod"),na.value="white")  +
-  labs(fill = "Log2(RPKM + 1)", title = "Human Developmental brain RNAseq - AQP4") +
+  labs(fill = "Log2(RPKM + 1)", title = paste0("Human Developmental brain RNAseq - ", gene)) +
   facet_wrap(~factor(broad_age, unique(age_df$broad_age)), ncol = 5) + theme_void() +
   theme(strip.text = element_text(size = 18), legend.position = "bottom", title = element_text(size = 24), plot.title = element_text(hjust = .5, vjust = 1))
+
 dev.off()  
