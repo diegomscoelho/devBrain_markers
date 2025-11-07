@@ -60,13 +60,20 @@ ages <- c("8 pcw", "9 pcw", "12 pcw", "13 pcw", "16 pcw", "17 pcw", "19 pcw", "2
           "2 yrs", "3 yrs", "4 yrs", "8 yrs", "11 yrs", "13 yrs", "15 yrs", "18 yrs", 
           "19 yrs", "21 yrs", "23 yrs", "30 yrs", "36 yrs", "37 yrs", "40 yrs")
 
+
+# How many donors per group
+merge(columns, age_df, by = "age") %>%
+  group_by(broad_age, donor_id) %>%
+  tally() %>% ungroup() %>%
+  group_by(broad_age) %>% tally()
+
 # Criando um mapeamento das idades para categorias
 age_mapping <- c(
-  rep("1st trimester (n = 108)", 3),   # 8 pcw - 12 pcw
-  rep("2nd trimester (n = 220)", 5),   # 13 pcw - 24 pcw
-  rep("3rd trimester (n = 64)", 5),   # 25 pcw - 37 pcw
-  rep("Infant (n = 203)", 10),          # 4 mos - 15 yrs
-  rep("Adult (n = 274)", 8)           # 18 yrs - 40 yrs
+  rep("1st trimester (n = 5)", 3),   # 8 pcw - 12 pcw
+  rep("2nd trimester (n = 10)", 5),   # 13 pcw - 24 pcw
+  rep("3rd trimester (n = 5)", 5),   # 25 pcw - 37 pcw
+  rep("Infant (n = 8)", 10),          # 4 mos - 15 yrs
+  rep("Adult (n = 14)", 8)           # 18 yrs - 40 yrs
 )
 
 # Criando um dataframe com o mapeamento
